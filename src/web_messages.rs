@@ -19,7 +19,14 @@ impl fmt::Display for SerializationError {
 impl std::error::Error for SerializationError {}
 
 pub trait Serializable {
+    /// # Errors
+    ///
+    /// Will return Err if the data is not serializable
     fn serialize(&self) -> Result<Vec<u8>, SerializationError>;
+
+    /// # Errors
+    ///
+    /// Will return Err if the data is not deserializable
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError>
     where
         Self: Sized;

@@ -2,7 +2,7 @@
 
 use crossbeam_channel::Sender;
 use wg_2024::network::{NodeId, SourceRoutingHeader};
-use wg_2024::packet::*;
+use wg_2024::packet::{FloodRequest, NodeType, Packet};
 
 // use super::utils;
 
@@ -12,25 +12,36 @@ use wg_2024::packet::*;
  *       utils library (if needed)
  */
 
+#[derive(Debug)]
+pub struct FloodingError;
+impl std::fmt::Display for FloodingError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Flooding Error")
+    }
+}
+impl std::error::Error for FloodingError {}
+
 // ! NOTE we can have the function take a packet but then we would need another enum match
 pub trait Flooder {
     // associated constants (looks like a good idea)
     const NODE_TYPE: NodeType;
 
-    fn get_id(&self) -> u8;
+    fn get_id(&self) -> NodeId;
     fn get_neighbours(&self) -> impl ExactSizeIterator<Item = &(NodeId, Sender<Packet>)>;
-    fn has_seen_flood(&self, flood_id: (u8, u64)) -> bool;
-    fn insert_flood(&mut self, flood_id: (u8, u64));
+    fn has_seen_flood(&self, flood_id: (NodeId, u64)) -> bool;
+    fn insert_flood(&mut self, flood_id: (NodeId, u64));
     fn send_to_controller(&self, p: Packet);
 
-    //
+    /// # Errors
+    ///
+    /// Will return Err if the flood reponse cannot be sent
     fn handle_flood_request(
         &mut self,
         routing_header: SourceRoutingHeader,
         sid: u64,
         mut flood_r: FloodRequest,
-    ) -> Result<(), ()> {
-        let sender_id: u8 = flood_r
+    ) -> Result<(), FloodingError> {
+        let sender_id: NodeId = flood_r
             .path_trace
             .last()
             .map_or(flood_r.initiator_id, |(id, t)| *id);
@@ -52,7 +63,7 @@ pub trait Flooder {
                     self.send_to_controller(new_packet);
                     Ok(())
                 }
-                None => Err(()),
+                None => Err(FloodingError),
             }
         } else {
             it.for_each(|(id, c)| {
