@@ -34,5 +34,6 @@ pub enum ServerEvent {
 // Command sent by a Drone to the Simulation Controller
 pub enum DroneEvent {
     PacketSent(Packet),
-    PacketDropped(Packet)
+    PacketDropped(Packet),
+    ControllerShortcut(Packet)
 }
