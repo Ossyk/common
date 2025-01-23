@@ -13,6 +13,7 @@ pub struct RingBuffer<T> {
 
 impl<T> RingBuffer<T> {
     #[inline]
+    #[must_use]
     pub fn with_capacity(size: usize) -> Self {
         Self {
             buff: if size < 0x400 {
@@ -41,11 +42,13 @@ impl<T> RingBuffer<T> {
     }
 
     #[inline]
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.buff.is_empty()
     }
 
     #[inline]
+    #[must_use]
     pub fn is_full(&self) -> bool {
         self.buff.len() == self.size
     }
