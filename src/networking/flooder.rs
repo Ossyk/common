@@ -27,7 +27,7 @@ pub trait Flooder {
     const NODE_TYPE: NodeType;
 
     fn get_id(&self) -> NodeId;
-    fn get_neighbours(&self) -> impl ExactSizeIterator<Item = &(NodeId, Sender<Packet>)>;
+    fn get_neighbours(&self) -> impl ExactSizeIterator<Item = (&NodeId, &Sender<Packet>)>;
     fn has_seen_flood(&self, flood_id: (NodeId, u64)) -> bool;
     fn insert_flood(&mut self, flood_id: (NodeId, u64));
     fn send_to_controller(&self, p: Packet);
@@ -57,7 +57,7 @@ pub trait Flooder {
                 .routing_header
                 .current_hop()
                 .expect("If this panics the wg code is borken");
-            match it.find(|(id, c)| *id == next_hop) {
+            match it.find(|(id, c)| **id == next_hop) {
                 Some((_, c)) => {
                     c.send(new_packet.clone());
                     self.send_to_controller(new_packet);
