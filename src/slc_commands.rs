@@ -12,12 +12,14 @@ pub enum ClientCommand {
     AskListOfFiles(NodeId),               // chat_server_id
     AskServersTypes,
     RequestFile(String, NodeId), // file_name, server_id
+    Shortcut(Packet),
 }
 
 // Commands sent by the Simulation Controller to a Server
 #[derive(Debug, Clone)]
 pub enum ServerCommand {
     AddSender(NodeId, Sender<Packet>),
+    Shortcut(Packet),
 }
 
 // Command sent by a Client to the Simulation Controller
