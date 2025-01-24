@@ -45,35 +45,44 @@ impl<T: Encode + Decode> Serializable for T {
     }
 }
 
+pub trait WebMessage {}
+
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum TextRequest {
     TextList,
-    Text(u64),
+    Text(String),
 }
+impl WebMessage for TextRequest {}
 
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum MediaRequest {
     MediaList,
-    Media(u64),
+    Media(String),
 }
+impl WebMessage for MediaRequest {}
 
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum TextResponse {
-    TextList(Vec<u64>),
+    TextList(Vec<String>),
     Text(String),
     NotFound,
+    InvalidRequest,
 }
+impl WebMessage for TextResponse {}
 
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum MediaResponse {
-    MediaList(Vec<u64>),
+    MediaList(Vec<String>),
     Media(Vec<u8>), // should we use some other type?
+    NotFound,
+    InvalidRequest,
 }
+impl WebMessage for MediaResponse {}
 
 #[derive(Debug, Clone, Encode, Decode)]
-pub struct Message<M> {
+pub struct Message<M: WebMessage> {
     pub source_id: NodeId,
-    pub session_id: u64,
+    pub request_id: u64,
     pub compression_type: Compression,
     pub content: M,
 }

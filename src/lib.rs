@@ -10,12 +10,13 @@ pub mod ring_buffer;
 pub mod slc_commands;
 pub mod web_messages;
 
-// TODO add correct types to parameters
+use slc_commands::*;
+
 pub trait Server {
     fn new(
         id: NodeId,
-        controller_send: Sender<u8>,
-        controller_recv: Receiver<u8>,
+        controller_send: Sender<ServerEvent>,
+        controller_recv: Receiver<ServerCommand>,
         packet_recv: Receiver<Packet>,
         packet_send: HashMap<NodeId, Sender<Packet>>,
     ) -> Self
@@ -25,12 +26,11 @@ pub trait Server {
     fn run(&mut self);
 }
 
-// TODO add correct types to parameters
 pub trait Client {
     fn new(
         id: NodeId,
-        controller_send: Sender<u8>,
-        controller_recv: Receiver<u8>,
+        controller_send: Sender<ClientEvent>,
+        controller_recv: Receiver<ClientCommand>,
         packet_recv: Receiver<Packet>,
         packet_send: HashMap<NodeId, Sender<Packet>>,
     ) -> Self
