@@ -37,9 +37,9 @@ pub trait Flooder {
     /// Will return Err if the flood reponse cannot be sent
     fn handle_flood_request(
         &mut self,
-        routing_header: SourceRoutingHeader,
+        routing_header: &SourceRoutingHeader,
         sid: u64,
-        mut flood_r: FloodRequest,
+        flood_r: &mut FloodRequest,
     ) -> Result<(), FloodingError> {
         let sender_id: NodeId = flood_r
             .path_trace
