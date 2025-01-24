@@ -1,11 +1,15 @@
+use std::collections::HashMap;
 use crossbeam_channel::Sender;
 use wg_2024::{network::NodeId, packet::Packet};
-// todo: receive messages, web page, drone events
-// received nacks from drones should be redirected to the source (client/server)
+
 // Commands sent by the Simulation Controller to a Client
 pub enum ClientCommand {
     AddSender(NodeId, Sender<Packet>),
-    SendChatText(String),
+    SendChatText(String, NodeId, NodeId), // text, client_id, chat_server_id
+    ConnectToChatServer(NodeId),          // chat_server_id
+    AskListOfFiles(NodeId),               // chat_server_id
+    AskServersTypes,
+    RequestFile(String, NodeId), // file_name, server_id
 }
 
 // Commands sent by the Simulation Controller to a Server
@@ -16,9 +20,22 @@ pub enum ServerCommand {
 // Command sent by a Client to the Simulation Controller
 pub enum ClientEvent {
     PacketSent(Packet),
+    Shortcut(Packet),
+    ClientsConnectedToChatServer(Vec<NodeId>),
+    ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
+    FileFromClient(String, NodeId),   // file content, server_id (maybe client_id)
+    ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
+    WrongClientId,
+    UnsupportedRequest,
 }
 
 // Command sent by a Server to the Simulation Controller
 pub enum ServerEvent {
     PacketSent(Packet),
+}
+
+pub enum ServerType {
+    ChatServer,
+    FileServer,
+    MediaServer,
 }
