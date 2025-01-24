@@ -7,6 +7,7 @@ use wg_2024::{network::NodeId, packet::Packet};
 #[derive(Debug, Clone)]
 pub enum ClientCommand {
     AddSender(NodeId, Sender<Packet>),
+    RemoveSender(NodeId),
     SendChatText(String, NodeId, NodeId), // text, client_id, chat_server_id
     ConnectToChatServer(NodeId),          // chat_server_id
     AskListOfFiles(NodeId),               // chat_server_id
@@ -19,6 +20,7 @@ pub enum ClientCommand {
 #[derive(Debug, Clone)]
 pub enum ServerCommand {
     AddSender(NodeId, Sender<Packet>),
+    RemoveSender(NodeId),
     Shortcut(Packet),
 }
 
