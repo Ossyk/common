@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use bincode::{Decode, Encode};
 use crossbeam_channel::Sender;
 use wg_2024::{network::NodeId, packet::Packet};
 
@@ -38,7 +39,7 @@ pub enum ServerEvent {
     PacketSent(Packet),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Encode, Decode)]
 pub enum ServerType {
     ChatServer,
     FileServer,

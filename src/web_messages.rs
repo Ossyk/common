@@ -3,6 +3,8 @@ use core::fmt;
 use bincode::{config, Decode, Encode};
 use wg_2024::network::NodeId;
 
+use crate::ServerType;
+
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum Compression {
     None,
@@ -80,9 +82,35 @@ pub enum MediaResponse {
 impl WebMessage for MediaResponse {}
 
 #[derive(Debug, Clone, Encode, Decode)]
-pub struct Message<M: WebMessage> {
+pub enum GenericResponse {
+    Type(ServerType)
+}
+
+#[derive(Debug, Clone, Encode, Decode)]
+pub enum Request{
+    Media(MediaRequest),
+    Text(TextRequest),
+    Type,
+}
+#[derive(Debug, Clone, Encode, Decode)]
+pub enum Response {
+    Media(MediaResponse),
+    Text(TextResponse),
+    Generic(GenericResponse),
+}
+
+#[derive(Debug, Clone, Encode, Decode)]
+pub struct RequestMessage {
     pub source_id: NodeId,
     pub request_id: u64,
     pub compression_type: Compression,
-    pub content: M,
+    pub content: Request,
+}
+
+#[derive(Debug, Clone, Encode, Decode)]
+pub struct ResponseMessage {
+    pub source_id: NodeId,
+    pub request_id: u64,
+    pub compression_type: Compression,
+    pub content: Response,
 }
