@@ -102,7 +102,6 @@ pub enum Response {
 #[derive(Debug, Clone, Encode, Decode)]
 pub struct RequestMessage {
     pub source_id: NodeId,
-    pub request_id: u64,
     pub compression_type: Compression,
     pub content: Request,
 }
@@ -110,7 +109,6 @@ pub struct RequestMessage {
 #[derive(Debug, Clone, Encode, Decode)]
 pub struct ResponseMessage {
     pub source_id: NodeId,
-    pub request_id: u64,
     pub compression_type: Compression,
     pub content: Response,
 }
