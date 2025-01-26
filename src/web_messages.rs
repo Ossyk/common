@@ -68,7 +68,6 @@ pub enum TextResponse {
     TextList(Vec<String>),
     Text(String),
     NotFound,
-    InvalidRequest,
 }
 impl WebMessage for TextResponse {}
 
@@ -77,13 +76,13 @@ pub enum MediaResponse {
     MediaList(Vec<String>),
     Media(Vec<u8>), // should we use some other type?
     NotFound,
-    InvalidRequest,
 }
 impl WebMessage for MediaResponse {}
 
 #[derive(Debug, Clone, Encode, Decode)]
 pub enum GenericResponse {
-    Type(ServerType)
+    Type(ServerType),
+    InvalidRequest,
 }
 
 #[derive(Debug, Clone, Encode, Decode)]
