@@ -4,7 +4,7 @@ use crossbeam_channel::Sender;
 use wg_2024::{network::NodeId, packet::Packet};
 
 // Commands sent by the Simulation Controller to a Client
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ClientCommand {
     AddSender(NodeId, Sender<Packet>),
     RemoveSender(NodeId),
@@ -17,7 +17,7 @@ pub enum ClientCommand {
 }
 
 // Commands sent by the Simulation Controller to a Server
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ServerCommand {
     AddSender(NodeId, Sender<Packet>),
     RemoveSender(NodeId),
@@ -25,7 +25,7 @@ pub enum ServerCommand {
 }
 
 // Command sent by a Client to the Simulation Controller
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ClientEvent {
     PacketSent(Packet),
     Shortcut(Packet),
@@ -38,12 +38,12 @@ pub enum ClientEvent {
 }
 
 // Command sent by a Server to the Simulation Controller
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum ServerEvent {
     PacketSent(Packet),
 }
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Copy, Encode, Decode)]
 pub enum ServerType {
     ChatServer,
     FileServer,
