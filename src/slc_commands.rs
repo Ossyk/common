@@ -42,6 +42,7 @@ pub enum ClientEvent {
 #[derive(Debug, Clone)]
 pub enum ServerEvent {
     PacketSent(Packet),
+    ShortCut(Packet)
 }
 
 #[derive(Debug, Clone, Copy, Encode, Decode, Hash)]
