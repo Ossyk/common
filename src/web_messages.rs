@@ -67,7 +67,6 @@ impl WebMessage for MediaRequest {}
 pub enum TextResponse {
     TextList(Vec<String>),
     Text(String),
-    NotFound,
 }
 impl WebMessage for TextResponse {}
 
@@ -75,7 +74,6 @@ impl WebMessage for TextResponse {}
 pub enum MediaResponse {
     MediaList(Vec<String>),
     Media(Vec<u8>), // should we use some other type?
-    NotFound,
 }
 impl WebMessage for MediaResponse {}
 
@@ -83,10 +81,11 @@ impl WebMessage for MediaResponse {}
 pub enum GenericResponse {
     Type(ServerType),
     InvalidRequest,
+    NotFound,
 }
 
 #[derive(Debug, Clone, Encode, Decode)]
-pub enum Request{
+pub enum Request {
     Media(MediaRequest),
     Text(TextRequest),
     Type,
@@ -110,4 +109,144 @@ pub struct ResponseMessage {
     pub source_id: NodeId,
     pub compression_type: Compression,
     pub content: Response,
+}
+
+impl RequestMessage {
+    pub fn new_text_list_request(
+        source_id: NodeId,
+        compression_type: Compression,
+    ) -> RequestMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Request::Text(TextRequest::TextList),
+        }
+    }
+
+    pub fn new_text_request(
+        source_id: NodeId,
+        compression_type: Compression,
+        file: String,
+    ) -> RequestMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Request::Text(TextRequest::Text(file)),
+        }
+    }
+
+    pub fn new_media_list_request(
+        source_id: NodeId,
+        compression_type: Compression,
+    ) -> RequestMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Request::Media(MediaRequest::MediaList),
+        }
+    }
+
+    pub fn new_media_request(
+        source_id: NodeId,
+        compression_type: Compression,
+        file: String,
+    ) -> RequestMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Request::Media(MediaRequest::Media(file)),
+        }
+    }
+
+    pub fn new_type_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Request::Type,
+        }
+    }
+}
+
+impl ResponseMessage {
+    pub fn new_type_response(
+        source_id: NodeId,
+        compression_type: Compression,
+        server_type: ServerType,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Generic(GenericResponse::Type(server_type)),
+        }
+    }
+
+    pub fn new_not_found_response(
+        source_id: NodeId,
+        compression_type: Compression,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Generic(GenericResponse::NotFound),
+        }
+    }
+
+    pub fn new_invalid_request_response(
+        source_id: NodeId,
+        compression_type: Compression,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Generic(GenericResponse::InvalidRequest),
+        }
+    }
+
+    pub fn new_text_list_response(
+        source_id: NodeId,
+        compression_type: Compression,
+        list: Vec<String>,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Text(TextResponse::TextList(list)),
+        }
+    }
+
+    pub fn new_text_response(
+        source_id: NodeId,
+        compression_type: Compression,
+        data: String,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Text(TextResponse::Text(data)),
+        }
+    }
+
+    pub fn new_media_list_response(
+        source_id: NodeId,
+        compression_type: Compression,
+        list: Vec<String>,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Media(MediaResponse::MediaList(list)),
+        }
+    }
+
+    pub fn new_media_response(
+        source_id: NodeId,
+        compression_type: Compression,
+        data: Vec<u8>,
+    ) -> ResponseMessage {
+        Self {
+            source_id,
+            compression_type,
+            content: Response::Media(MediaResponse::Media(data)),
+        }
+    }
 }

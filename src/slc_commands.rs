@@ -1,7 +1,7 @@
-use core::hash;
-use std::collections::HashMap;
 use bincode::{Decode, Encode};
+use core::hash;
 use crossbeam_channel::Sender;
+use std::collections::HashMap;
 use wg_2024::{network::NodeId, packet::Packet};
 
 // Commands sent by the Simulation Controller to a Client
@@ -42,7 +42,7 @@ pub enum ClientEvent {
 #[derive(Debug, Clone)]
 pub enum ServerEvent {
     PacketSent(Packet),
-    ShortCut(Packet)
+    ShortCut(Packet),
 }
 
 #[derive(Debug, Clone, Copy, Encode, Decode, Hash)]
