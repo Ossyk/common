@@ -112,6 +112,8 @@ pub struct ResponseMessage {
 }
 
 impl RequestMessage {
+    #[inline]
+    #[must_use]
     pub fn new_text_list_request(
         source_id: NodeId,
         compression_type: Compression,
@@ -123,6 +125,8 @@ impl RequestMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_text_request(
         source_id: NodeId,
         compression_type: Compression,
@@ -135,6 +139,8 @@ impl RequestMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_media_list_request(
         source_id: NodeId,
         compression_type: Compression,
@@ -146,6 +152,8 @@ impl RequestMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_media_request(
         source_id: NodeId,
         compression_type: Compression,
@@ -158,6 +166,8 @@ impl RequestMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_type_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
         Self {
             source_id,
@@ -168,6 +178,8 @@ impl RequestMessage {
 }
 
 impl ResponseMessage {
+    #[inline]
+    #[must_use]
     pub fn new_type_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -180,6 +192,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_not_found_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -191,6 +205,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_invalid_request_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -202,6 +218,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_text_list_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -214,6 +232,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_text_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -226,6 +246,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_media_list_response(
         source_id: NodeId,
         compression_type: Compression,
@@ -238,6 +260,8 @@ impl ResponseMessage {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn new_media_response(
         source_id: NodeId,
         compression_type: Compression,

@@ -1,6 +1,7 @@
 #![warn(clippy::pedantic)]
 
 use crossbeam_channel::{Receiver, Sender};
+use slc_commands::{ClientCommand, ClientEvent, ServerCommand, ServerEvent, ServerType};
 use std::collections::HashMap;
 use wg_2024::network::NodeId;
 use wg_2024::packet::Packet;
@@ -9,8 +10,6 @@ pub mod networking;
 pub mod ring_buffer;
 pub mod slc_commands;
 pub mod web_messages;
-
-use slc_commands::*;
 
 pub trait Server {
     fn new(

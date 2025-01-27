@@ -1,5 +1,4 @@
 use bincode::{Decode, Encode};
-use core::hash;
 use crossbeam_channel::Sender;
 use std::collections::HashMap;
 use wg_2024::{network::NodeId, packet::Packet};
