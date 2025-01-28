@@ -44,7 +44,7 @@ pub enum ServerEvent {
     ShortCut(Packet),
 }
 
-#[derive(Debug, Clone, Copy, Encode, Decode, Hash)]
+#[derive(Debug, Clone, Copy, Encode, Decode, Hash, PartialEq, Eq)]
 pub enum ServerType {
     ChatServer,
     FileServer,
