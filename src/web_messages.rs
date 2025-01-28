@@ -5,7 +5,7 @@ use wg_2024::network::NodeId;
 
 use crate::ServerType;
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum Compression {
     None,
     LZW,
@@ -49,62 +49,62 @@ impl<T: Encode + Decode> Serializable for T {
 
 pub trait WebMessage {}
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum TextRequest {
     TextList,
     Text(String),
 }
 impl WebMessage for TextRequest {}
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum MediaRequest {
     MediaList,
     Media(String),
 }
 impl WebMessage for MediaRequest {}
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum TextResponse {
     TextList(Vec<String>),
     Text(String),
 }
 impl WebMessage for TextResponse {}
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum MediaResponse {
     MediaList(Vec<String>),
     Media(Vec<u8>), // should we use some other type?
 }
 impl WebMessage for MediaResponse {}
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum GenericResponse {
     Type(ServerType),
     InvalidRequest,
     NotFound,
 }
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum Request {
     Media(MediaRequest),
     Text(TextRequest),
     Type,
 }
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum Response {
     Media(MediaResponse),
     Text(TextResponse),
     Generic(GenericResponse),
 }
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub struct RequestMessage {
     pub source_id: NodeId,
     pub compression_type: Compression,
     pub content: Request,
 }
 
-#[derive(Debug, Clone, Encode, Decode)]
+#[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub struct ResponseMessage {
     pub source_id: NodeId,
     pub compression_type: Compression,
