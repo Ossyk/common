@@ -25,7 +25,7 @@ pub enum ServerCommand {
 }
 
 // Command sent by a Client to the Simulation Controller
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ClientEvent {
     PacketSent(Packet),
     Shortcut(Packet),
@@ -38,7 +38,7 @@ pub enum ClientEvent {
 }
 
 // Command sent by a Server to the Simulation Controller
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ServerEvent {
     PacketSent(Packet),
     ShortCut(Packet),
