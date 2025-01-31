@@ -31,7 +31,7 @@ pub enum ClientEvent {
     Shortcut(Packet),
     ClientsConnectedToChatServer(Vec<NodeId>),
     ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
-    FileFromClient(String, NodeId),   // file content, server_id (maybe client_id)
+    FileFromClient(Vec<Vec<u8>>, NodeId),   // file content (first vec is html, others are media), server_id (maybe client_id)
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
     WrongClientId,
     UnsupportedRequest,
