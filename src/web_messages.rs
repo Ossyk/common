@@ -66,14 +66,14 @@ impl WebMessage for MediaRequest {}
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum TextResponse {
     TextList(Vec<String>),
-    Text(String),
+    Text(Vec<u8>),
 }
 impl WebMessage for TextResponse {}
 
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum MediaResponse {
     MediaList(Vec<String>),
-    Media(Vec<u8>), // should we use some other type?
+    Media(Vec<u8>),
 }
 impl WebMessage for MediaResponse {}
 
@@ -237,7 +237,7 @@ impl ResponseMessage {
     pub fn new_text_response(
         source_id: NodeId,
         compression_type: Compression,
-        data: String,
+        data: Vec<u8>,
     ) -> ResponseMessage {
         Self {
             source_id,
