@@ -25,11 +25,11 @@ pub trait Server {
     fn run(&mut self);
 }
 
-pub trait Client {
+pub trait Client<T: ClientCommand, U: ClientEvent> {
     fn new(
         id: NodeId,
-        controller_send: Sender<ClientEvent>,
-        controller_recv: Receiver<ClientCommand>,
+        controller_send: Sender<U>,
+        controller_recv: Receiver<T>,
         packet_recv: Receiver<Packet>,
         packet_send: HashMap<NodeId, Sender<Packet>>,
     ) -> Self
