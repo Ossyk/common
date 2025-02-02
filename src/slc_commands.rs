@@ -3,7 +3,7 @@ use crossbeam_channel::Sender;
 use std::collections::HashMap;
 use wg_2024::{network::NodeId, packet::Packet};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TextMediaResponse {
     html_file: (String, Vec<u8>),
     media_files: Vec<(String, Vec<u8>)>,
@@ -39,7 +39,7 @@ pub enum WebClientEvent {
     Shortcut(Packet),
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
     ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
-    FileFromClient(Vec<Vec<u8>>, NodeId), // file content (first vec is html, others are media), server_id (maybe client_id)
+    FileFromClient(TextMediaResponse, NodeId), // file content (first vec is html, others are media), server_id (maybe client_id)
     UnsupportedRequest,
 }
 
