@@ -16,6 +16,14 @@ impl TextMediaResponse {
             media_files,
         }
     }
+
+    pub fn get_html_file(&self) -> &(String, Vec<u8>) {
+        &self.html_file
+    }
+
+    pub fn get_media_files(&self) -> &Vec<(String, Vec<u8>)> {
+        &self.media_files
+    }
 }
 
 pub trait ClientCommand {}
