@@ -10,6 +10,8 @@ pub struct TextMediaResponse {
 }
 
 impl TextMediaResponse {
+    #[inline]
+    #[must_use]
     pub fn new(html_file: (String, Vec<u8>), media_files: Vec<(String, Vec<u8>)>) -> Self {
         Self {
             html_file,
@@ -17,10 +19,14 @@ impl TextMediaResponse {
         }
     }
 
+    #[inline]
+    #[must_use]
     pub fn get_html_file(&self) -> &(String, Vec<u8>) {
         &self.html_file
     }
 
+    #[inline]
+    #[must_use]
     pub fn get_media_files(&self) -> &Vec<(String, Vec<u8>)> {
         &self.media_files
     }
@@ -34,7 +40,7 @@ pub enum WebClientCommand {
     AddSender(NodeId, Sender<Packet>),
     RemoveSender(NodeId),
     AskServersTypes,
-    AskListOfFiles(NodeId), // chat_server_id
+    AskListOfFiles(NodeId),      // chat_server_id
     RequestFile(String, NodeId), // file_name, server_id
     Shortcut(Packet),
 }
@@ -46,7 +52,7 @@ pub enum WebClientEvent {
     PacketSent(Packet),
     Shortcut(Packet),
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
-    ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
+    ListOfFiles(Vec<String>, NodeId),          // list of files, chat_server_id
     FileFromClient(TextMediaResponse, NodeId), // file content (first vec is html, others are media), server_id (maybe client_id)
     UnsupportedRequest,
 }
@@ -58,7 +64,7 @@ pub enum ChatClientCommand {
     AddSender(NodeId, Sender<Packet>),
     RemoveSender(NodeId),
     AskServersTypes,
-    ConnectToChatServer(NodeId), // chat_server_id
+    ConnectToChatServer(NodeId),          // chat_server_id
     SendChatText(String, NodeId, NodeId), // text, client_id, chat_server_id
     Shortcut(Packet),
 }
