@@ -9,6 +9,7 @@ use crate::ServerType;
 pub enum Compression {
     None,
     LZW,
+    Huffman,
 }
 
 #[derive(Debug)]
