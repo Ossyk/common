@@ -29,10 +29,10 @@ pub trait Flooder {
     /// retrieves the neighbors of the node
     fn get_neighbours(&self) -> impl ExactSizeIterator<Item = (&NodeId, &Sender<Packet>)>;
     /// checks if the node has already seen a flood
-    /// * flood_id: ID of the flood to check
+    /// * `flood_id`: ID of the flood to check
     fn has_seen_flood(&self, flood_id: (NodeId, u64)) -> bool;
-    /// insert the flood_id insde the history of floods that have been already seen
-    /// * flood_id: ID of the flood to store
+    /// insert the `flood_id` insde the history of floods that have been already seen
+    /// * `flood_id`: ID of the flood to store
     fn insert_flood(&mut self, flood_id: (NodeId, u64));
     /// logs to scl that the packet p has been sent
     /// * p: packet to be logged

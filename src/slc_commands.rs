@@ -19,9 +19,9 @@ pub struct TextMediaResponse {
 }
 
 impl TextMediaResponse {
-    /// Constructor for TextMediaResponse
-    /// * html_file: pair (text filename, text file content)
-    /// * media_files: array of pairs (media filename, media file content)
+    /// Constructor for `TextMediaResponse`
+    /// * `html_file`: pair (text filename, text file content)
+    /// * `media_files`: array of pairs (media filename, media file content)
     #[inline]
     #[must_use]
     pub fn new(html_file: (String, Vec<u8>), media_files: Vec<(String, Vec<u8>)>) -> Self {
@@ -31,14 +31,14 @@ impl TextMediaResponse {
         }
     }
 
-    /// Getter of the pair html_file
+    /// Getter of the pair `html_file`
     #[inline]
     #[must_use]
     pub fn get_html_file(&self) -> &(String, Vec<u8>) {
         &self.html_file
     }
 
-    /// Getter of the array of pairs media_files
+    /// Getter of the array of pairs `media_files`
     #[inline]
     #[must_use]
     pub fn get_media_files(&self) -> &Vec<(String, Vec<u8>)> {
@@ -81,7 +81,7 @@ pub enum WebClientEvent {
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
     /// communicate to scl the files available from the server identified by the given ID
     ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
-    /// send a TextMediaResponse whose text file comes from the server identified from the given ID
+    /// send a `TextMediaResponse` whose text file comes from the server identified from the given ID
     FileFromClient(TextMediaResponse, NodeId), // file content (first vec is html, others are media), server_id (maybe client_id)
     /// inform that client received an unsupported request
     UnsupportedRequest,

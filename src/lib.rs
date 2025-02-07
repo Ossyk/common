@@ -19,10 +19,10 @@ pub mod web_messages;
 pub trait Server {
     /// Constructor of a server
     /// * id: ID if the new server
-    /// * controller_send: channel to send events to scl
-    /// * controller_recv: channel to receive commands from scl
-    /// * packet_recv: channel to receive packets from other nodes
-    /// * packet_send: map of channels to talk to a specific neighbor ID
+    /// * `controller_send`: channel to send events to scl
+    /// * `controller_recv`: channel to receive commands from scl
+    /// * `packet_recv`: channel to receive packets from other nodes
+    /// * `packet_send`: map of channels to talk to a specific neighbor ID
     fn new(
         id: NodeId,
         controller_send: Sender<ServerEvent>,
@@ -43,10 +43,10 @@ pub trait Server {
 pub trait Client<T: ClientCommand, U: ClientEvent> {
     /// Constructor of a client
     /// * id: ID if the new server
-    /// * controller_send: channel to send events to scl
-    /// * controller_recv: channel to receive commands from scl
-    /// * packet_recv: channel to receive packets from other nodes
-    /// * packet_send: map of channels to talk to a specific neighbor ID
+    /// * `controller_send`: channel to send events to scl
+    /// * `controller_recv`: channel to receive commands from scl
+    /// * `packet_recv`: channel to receive packets from other nodes
+    /// * `packet_send`: map of channels to talk to a specific neighbor ID
     fn new(
         id: NodeId,
         controller_send: Sender<U>,

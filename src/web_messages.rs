@@ -174,8 +174,8 @@ pub struct ResponseMessage {
 
 impl RequestMessage {
     /// Constructor for a text list request
-    /// * source_id: id of the web client that creates the request
-    /// * compression_type: compression algorithm to be used for the response's content
+    /// * `source_id`: id of the web client that creates the request
+    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
     pub fn new_text_list_request(
@@ -190,8 +190,8 @@ impl RequestMessage {
     }
 
     /// Constructor for a text request
-    /// * source_id: id of the web client that creates the request
-    /// * compression_type: compression algorithm to be used for the response's content
+    /// * `source_id`: id of the web client that creates the request
+    /// * `compression_type`: compression algorithm to be used for the response's content
     /// * file: name of the requested text file
     #[inline]
     #[must_use]
@@ -208,8 +208,8 @@ impl RequestMessage {
     }
 
     /// Constructor for a media list request
-    /// * source_id: id of the web client that creates the request
-    /// * compression_type: compression algorithm to be used for the response's content
+    /// * `source_id`: id of the web client that creates the request
+    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
     pub fn new_media_list_request(
@@ -224,8 +224,8 @@ impl RequestMessage {
     }
 
     /// Constructor for a media request
-    /// * source_id: id of the web client that creates the request
-    /// * compression_type: compression algorithm to be used for the response's content
+    /// * `source_id`: id of the web client that creates the request
+    /// * `compression_type`: compression algorithm to be used for the response's content
     /// * file: name of the requested media file
     #[inline]
     #[must_use]
@@ -242,8 +242,8 @@ impl RequestMessage {
     }
 
     /// Constructor for a type request
-    /// * source_id: id of the web client that creates the request
-    /// * compression_type: compression algorithm to be used for the response's content
+    /// * `source_id`: id of the web client that creates the request
+    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
     pub fn new_type_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
@@ -257,9 +257,9 @@ impl RequestMessage {
 
 impl ResponseMessage {
     /// Constructor for a type response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
-    /// * server_type: type of server that sends this response
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
+    /// * `server_type`: type of server that sends this response
     #[inline]
     #[must_use]
     pub fn new_type_response(
@@ -275,8 +275,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for a "not found" response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     #[inline]
     #[must_use]
     pub fn new_not_found_response(
@@ -291,8 +291,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for an "invalid request" response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     #[inline]
     #[must_use]
     pub fn new_invalid_request_response(
@@ -307,8 +307,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for a text list response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     /// * list: list of text files available in the server
     #[inline]
     #[must_use]
@@ -325,8 +325,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for a text file response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     /// * data: serialized text file
     #[inline]
     #[must_use]
@@ -343,8 +343,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for a media list file response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     /// * list: list of media files available in the server
     #[inline]
     #[must_use]
@@ -361,8 +361,8 @@ impl ResponseMessage {
     }
 
     /// Constructor for a media file response
-    /// * source_id: id of the web server that creates the response
-    /// * compression_type: compression algorithm used for the response's content
+    /// * `source_id`: id of the web server that creates the response
+    /// * `compression_type`: compression algorithm used for the response's content
     /// * data: serialized media file
     #[inline]
     #[must_use]
