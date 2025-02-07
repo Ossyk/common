@@ -1,6 +1,6 @@
 /*!
     C++Enjoyers: Shared code crate used by clients, servers and scl
- */
+*/
 
 #![warn(clippy::pedantic)]
 
@@ -15,7 +15,14 @@ pub mod ring_buffer;
 pub mod slc_commands;
 pub mod web_messages;
 
+/// Needed by a node to act as a server in the network
 pub trait Server {
+    /// Constructor of a server
+    /// * id: ID if the new server
+    /// * controller_send: channel to send events to scl
+    /// * controller_recv: channel to receive commands from scl
+    /// * packet_recv: channel to receive packets from other nodes
+    /// * packet_send: map of channels to talk to a specific neighbor ID
     fn new(
         id: NodeId,
         controller_send: Sender<ServerEvent>,
@@ -26,10 +33,20 @@ pub trait Server {
     where
         Self: Sized;
 
+    /// * Core function that put the server in "running mode"
     fn run(&mut self);
 }
 
+/// Needed by a node to act as a client in the network
+/// * <T: ClientCommand>: type of client command that the client can accept
+/// * <U: ClientEvent>: type of client events that the client can send
 pub trait Client<T: ClientCommand, U: ClientEvent> {
+    /// Constructor of a client
+    /// * id: ID if the new server
+    /// * controller_send: channel to send events to scl
+    /// * controller_recv: channel to receive commands from scl
+    /// * packet_recv: channel to receive packets from other nodes
+    /// * packet_send: map of channels to talk to a specific neighbor ID
     fn new(
         id: NodeId,
         controller_send: Sender<U>,
@@ -40,5 +57,6 @@ pub trait Client<T: ClientCommand, U: ClientEvent> {
     where
         Self: Sized;
 
+    /// * Core function that put the client in "running mode"
     fn run(&mut self);
 }
