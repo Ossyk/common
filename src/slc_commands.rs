@@ -80,7 +80,7 @@ pub enum WebClientEvent {
     /// communicate to scl the servers type of the servers in the network
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
     /// communicate to scl the files available from the server identified by the given ID
-    ListOfFiles(Vec<String>, NodeId),          // list of files, chat_server_id
+    ListOfFiles(Vec<String>, NodeId), // list of files, chat_server_id
     /// send a TextMediaResponse whose text file comes from the server identified from the given ID
     FileFromClient(TextMediaResponse, NodeId), // file content (first vec is html, others are media), server_id (maybe client_id)
     /// inform that client received an unsupported request
@@ -99,7 +99,7 @@ pub enum ChatClientCommand {
     /// Ask a client to discover the server types in the network
     AskServersTypes,
     /// Ask a client to connect to the server identified by the given ID
-    ConnectToChatServer(NodeId),          // chat_server_id
+    ConnectToChatServer(NodeId), // chat_server_id
     /// Ask a client to send a message (first parameter) to anothe client (second parameter) through a chat server (third parameter)
     SendChatText(String, NodeId, NodeId), // text, client_id, chat_server_id
     /// Scl shortcuts a packet to the client

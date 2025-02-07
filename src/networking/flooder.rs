@@ -1,17 +1,13 @@
 #![allow(unused)]
+/*!
+    This module contains the Flooder trait which is common to both clients and servers in the network
+*/
 
 use crossbeam_channel::Sender;
 use wg_2024::network::{NodeId, SourceRoutingHeader};
 use wg_2024::packet::{FloodRequest, NodeType, Packet};
 
-// use super::utils;
-
-/*
- * TODO: enum for msg types with a generic trait msg,
- *       Client/Server trait (force it to use Flooder trait)
- *       utils library (if needed)
- */
-
+/// Error that is generated during the handling of a flood request
 #[derive(Debug)]
 pub struct FloodingError;
 impl std::fmt::Display for FloodingError {
@@ -21,17 +17,28 @@ impl std::fmt::Display for FloodingError {
 }
 impl std::error::Error for FloodingError {}
 
+/// Gives the ability to handle a flood request in the network
 // ! NOTE we can have the function take a packet but then we would need another enum match
 pub trait Flooder {
+    /// specifies the node's type that is implementing the trait
     // associated constants (looks like a good idea)
     const NODE_TYPE: NodeType;
 
+    /// retrieves the ID of the node
     fn get_id(&self) -> NodeId;
+    /// retrieves the neighbors of the node
     fn get_neighbours(&self) -> impl ExactSizeIterator<Item = (&NodeId, &Sender<Packet>)>;
+    /// checks if the node has already seen a flood
+    /// * flood_id: ID of the flood to check
     fn has_seen_flood(&self, flood_id: (NodeId, u64)) -> bool;
+    /// insert the flood_id insde the history of floods that have been already seen
+    /// * flood_id: ID of the flood to store
     fn insert_flood(&mut self, flood_id: (NodeId, u64));
+    /// logs to scl that the packet p has been sent
+    /// * p: packet to be logged
     fn send_to_controller(&self, p: Packet);
 
+    /// Provided method that handles an incoming flood request
     /// # Errors
     ///
     /// Will return Err if the flood reponse cannot be sent
