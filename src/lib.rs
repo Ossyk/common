@@ -1,3 +1,7 @@
+/*!
+    C++Enjoyers: Shared code crate used by clients, servers and scl
+ */
+
 #![warn(clippy::pedantic)]
 
 use crossbeam_channel::{Receiver, Sender};
