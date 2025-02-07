@@ -118,7 +118,7 @@ pub enum ChatClientEvent {
     /// communicate to scl the servers type of the servers in the network
     ServersTypes(HashMap<NodeId, ServerType>), // server_id, server_type
     /// communicate to scl all the clients connected to a chat server
-    ClientsConnectedToChatServer(Vec<NodeId>),
+    ClientsConnectedToChatServer(NodeId, Vec<NodeId>),
     /// communicate to scl that a new message has arrived from the node with the given ID
     NewMessageFrom(NodeId), // client_id, maybe add also chat_server_id
     /// inform that client received an unsupported request
