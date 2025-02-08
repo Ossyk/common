@@ -86,7 +86,7 @@ impl<T: Serialize + DeserializeOwned> SerializableSerde for T {
     }
 }
 
-/// Identifies a message thta can be exchanged between web clients/servers
+/// Identifies a message that can be exchanged between web clients/servers
 pub trait WebMessage {}
 
 /// Identifies the types of requests that can be sent to a text server
