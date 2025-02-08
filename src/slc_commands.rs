@@ -104,6 +104,8 @@ pub enum ChatClientCommand {
     SendChatText(String, NodeId, NodeId), // text, client_id, chat_server_id
     /// Scl shortcuts a packet to the client
     Shortcut(Packet),
+    /// Send a text message for processing by the client
+    SendMessage(String)
 }
 
 impl ClientCommand for ChatClientCommand {}
@@ -123,6 +125,8 @@ pub enum ChatClientEvent {
     NewMessageFrom(NodeId), // client_id, maybe add also chat_server_id
     /// inform that client received an unsupported request
     UnsupportedRequest,
+    /// Receive text to print out
+    MessageReceived(String),
 }
 
 impl ClientEvent for ChatClientEvent {}
