@@ -105,7 +105,7 @@ pub enum ChatClientCommand {
     /// Scl shortcuts a packet to the client
     Shortcut(Packet),
     /// Send a text message for processing by the client
-    SendMessage(String)
+    SendMessage(String),
 }
 
 impl ClientCommand for ChatClientCommand {}

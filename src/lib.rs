@@ -16,7 +16,10 @@ pub mod slc_commands;
 pub mod web_messages;
 
 /// Needed by a node to act as a server in the network
-pub trait Server {
+pub trait Server
+where
+    Self: Send,
+{
     /// Constructor of a server
     /// * id: ID if the new server
     /// * `controller_send`: channel to send events to scl
@@ -40,7 +43,10 @@ pub trait Server {
 /// Needed by a node to act as a client in the network
 /// * <T: ClientCommand>: type of client command that the client can accept
 /// * <U: ClientEvent>: type of client events that the client can send
-pub trait Client {
+pub trait Client
+where
+    Self: Send,
+{
     type T: ClientCommand;
     type U: ClientEvent;
     /// Constructor of a client
