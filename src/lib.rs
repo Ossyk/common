@@ -40,7 +40,9 @@ pub trait Server {
 /// Needed by a node to act as a client in the network
 /// * <T: ClientCommand>: type of client command that the client can accept
 /// * <U: ClientEvent>: type of client events that the client can send
-pub trait Client<T: ClientCommand, U: ClientEvent> {
+pub trait Client {
+    type T: ClientCommand;
+    type U: ClientEvent;
     /// Constructor of a client
     /// * id: ID if the new server
     /// * `controller_send`: channel to send events to scl
@@ -49,8 +51,8 @@ pub trait Client<T: ClientCommand, U: ClientEvent> {
     /// * `packet_send`: map of channels to talk to a specific neighbor ID
     fn new(
         id: NodeId,
-        controller_send: Sender<U>,
-        controller_recv: Receiver<T>,
+        controller_send: Sender<Self::U>,
+        controller_recv: Receiver<Self::T>,
         packet_recv: Receiver<Packet>,
         packet_send: HashMap<NodeId, Sender<Packet>>,
     ) -> Self
