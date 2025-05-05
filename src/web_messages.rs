@@ -5,7 +5,7 @@
 
 use core::fmt;
 
-use bincode::{config, Decode, Encode};
+//use bincode::{config, Decode, Encode};
 use serde::{de::DeserializeOwned, Serialize};
 use wg_2024::network::NodeId;
 
@@ -57,16 +57,16 @@ pub trait SerializableSerde {
     where
         Self: Sized;
 }
-use bincode::config::{self, Configuration};
-
-impl<T: Encode + for<'a> Decode<config::WithOtherEndian<config::DefaultEncoding, config::LittleEndian>>> Serializable for T {
+use bincode::config::{standard, WithOtherEndian, DefaultEncoding, LittleEndian};
+use bincode::{Encode, Decode};
+impl<T: Encode + for<'a> Decode<WithOtherEndian<DefaultEncoding, LittleEndian>>> Serializable for T {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
-        bincode::encode_to_vec(self, config::standard())
+        bincode::encode_to_vec(self, standard())
             .map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::decode_from_slice(&data, config::standard()) {
+        match bincode::decode_from_slice(&data, standard()) {
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
