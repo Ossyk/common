@@ -59,7 +59,8 @@ pub trait SerializableSerde {
         Self: Sized;
 }
 
-impl<T: Encode + Decode> Serializable for T {
+impl<'de, T: Encode + Decode<'de>> Serializable for T
+ {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
         bincode::encode_to_vec(self, config::standard()).map_err(|_| SerializationError)
     }
