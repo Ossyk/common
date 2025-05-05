@@ -57,16 +57,16 @@ pub trait SerializableSerde {
     where
         Self: Sized;
 }
-use bincode::config::standard;
-type BincodeConfig = <bincode::config::Standard as bincode::config::Configuration>::Options;
-impl<T: Encode + Decode<BincodeConfig>> Serializable for T {
+use bincode::config::{self, Configuration};
+
+impl<T: Encode + for<'a> Decode<config::WithOtherEndian<config::DefaultEncoding, config::LittleEndian>>> Serializable for T {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
-        bincode::encode_to_vec(self, standard())
+        bincode::encode_to_vec(self, config::standard())
             .map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::decode_from_slice(&data, standard()) {
+        match bincode::decode_from_slice(&data, config::standard()) {
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
