@@ -50,12 +50,13 @@ where
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::decode_from_slice::<T, _>(&data, ()) {   // <-- use () as context
+        match bincode::decode_from_slice::<T, _>(&data, standard()) {
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
     }
 }
+
 
 
 use bincode::serde::{encode_to_vec as serde_encode_to_vec, decode_from_slice as serde_decode_from_slice};
