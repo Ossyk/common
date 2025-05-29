@@ -43,19 +43,20 @@ pub trait SerializableSerde {
 
 impl<T> Serializable for T
 where
-    T: Encode + Decode<Configuration>,
+    T: Encode + Decode<()>,
 {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
         bincode::encode_to_vec(self, standard()).map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::decode_from_slice::<T, Configuration>(&data, standard()) {
+        match bincode::decode_from_slice::<T, _>(&data, ()) {   // <-- use () as context
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
     }
 }
+
 
 use bincode::serde::{encode_to_vec as serde_encode_to_vec, decode_from_slice as serde_decode_from_slice};
 
