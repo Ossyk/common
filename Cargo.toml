@@ -5,8 +5,9 @@ edition = "2021"
 
 [dependencies]
 wg_2024 = { git = "https://github.com/WGL-2024/WGL_repo_2024.git", features = ["serialize", "debug"] }
-bincode = { version = "2.0.0-rc", features = ["serde"] }
-serde = "1.0"
+bincode = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+
 crossbeam-channel = "0.5"
 log = "0.4"
 rand = "0.8"
