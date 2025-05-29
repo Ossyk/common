@@ -5,7 +5,7 @@
 
 use core::fmt;
 
-use bincode::config::standard;
+use bincode::config::{standard, Configuration};
 use bincode::{Encode, Decode};
 use serde::{Serialize, de::DeserializeOwned};
 
@@ -60,7 +60,7 @@ pub trait SerializableSerde {
         Self: Sized;
 }
 
-impl<T: Encode + for<'a> Decode<'a, bincode::config::Configuration>> Serializable for T {
+impl<T: Encode + Decode<Configuration>> Serializable for T {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
         bincode::encode_to_vec(self, standard()).map_err(|_| SerializationError)
     }
