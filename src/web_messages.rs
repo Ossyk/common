@@ -6,8 +6,11 @@
 use core::fmt;
 
 //use bincode::{config, Decode, Encode};
+use bincode::config::{standard, Configuration};
+use bincode::{Encode, Decode};
 use serde::{de::DeserializeOwned, Serialize};
 use wg_2024::network::NodeId;
+use bincode::config::{ WithOtherEndian, DefaultEncoding, LittleEndian};
 
 use crate::ServerType;
 
@@ -57,12 +60,10 @@ pub trait SerializableSerde {
     where
         Self: Sized;
 }
-use bincode::config::{standard, WithOtherEndian, DefaultEncoding, LittleEndian};
-use bincode::{Encode, Decode};
-impl<T: Encode + for<'a> Decode<WithOtherEndian<DefaultEncoding, LittleEndian>>> Serializable for T {
+
+impl<T: Encode + for<'a> Decode> Serializable for T {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
-        bincode::encode_to_vec(self, standard())
-            .map_err(|_| SerializationError)
+        bincode::encode_to_vec(self, standard()).map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
@@ -73,19 +74,21 @@ impl<T: Encode + for<'a> Decode<WithOtherEndian<DefaultEncoding, LittleEndian>>>
     }
 }
 
+
 // Sadly, we can't use the same trait due to conflicts
 impl<T: Serialize + DeserializeOwned> SerializableSerde for T {
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
-        bincode::serde::encode_to_vec(self, config::standard()).map_err(|_| SerializationError)
+        bincode::serde::encode_to_vec(self, standard()).map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::serde::decode_from_slice(&data, config::standard()) {
+        match bincode::serde::decode_from_slice(&data, standard()) {
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
     }
 }
+
 
 /// Identifies a message that can be exchanged between web clients/servers
 pub trait WebMessage {}
