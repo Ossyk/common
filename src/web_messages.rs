@@ -1,16 +1,11 @@
-/*!
-    This module contains the types used to implement communication between
-    web clietns and web servers
-*/
+/*! This module contains the types used to implement communication between web clients and web servers */
 
 use core::fmt;
-
 use bincode::config::{standard, Configuration};
 use bincode::{Encode, Decode};
 use serde::{Serialize, de::DeserializeOwned};
 
 use wg_2024::network::NodeId;
-
 use crate::ServerType;
 
 /// Compression type to be used in a web client-server communication
@@ -33,46 +28,34 @@ impl std::error::Error for SerializationError {}
 
 /// Reflects the capability of converting an object into and from a vector of bytes
 pub trait Serializable {
-    /// # Errors
-    ///
-    /// Will return Err if the data is not serializable
     fn serialize(&self) -> Result<Vec<u8>, SerializationError>;
-
-    /// # Errors
-    ///
-    /// Will return Err if the data is not deserializable
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError>
     where
         Self: Sized;
 }
 
-/// Reflects the capability of converting an object into and from a vector of bytes
 pub trait SerializableSerde {
-    /// # Errors
-    ///
-    /// Will return Err if the data is not serializable
     fn serialize(&self) -> Result<Vec<u8>, SerializationError>;
-    /// # Errors
-    ///
-    /// Will return Err if the data is not deserializable
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError>
     where
         Self: Sized;
 }
 
-impl<T: Encode + Decode<Configuration>> Serializable for T {
+impl<T> Serializable for T
+where
+    T: Encode + Decode<Configuration>,
+{
     fn serialize(&self) -> Result<Vec<u8>, SerializationError> {
         bincode::encode_to_vec(self, standard()).map_err(|_| SerializationError)
     }
 
     fn deserialize(data: Vec<u8>) -> Result<Self, SerializationError> {
-        match bincode::decode_from_slice(&data, standard()) {
+        match bincode::decode_from_slice::<T, Configuration>(&data, standard()) {
             Ok((s, _)) => Ok(s),
             Err(_) => Err(SerializationError),
         }
     }
 }
-
 
 use bincode::serde::{encode_to_vec as serde_encode_to_vec, decode_from_slice as serde_decode_from_slice};
 
@@ -89,62 +72,43 @@ impl<T: Serialize + DeserializeOwned> SerializableSerde for T {
     }
 }
 
-
-/// Identifies a message that can be exchanged between web clients/servers
 pub trait WebMessage {}
 
-/// Identifies the types of requests that can be sent to a text server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum TextRequest {
-    /// Client request a list of all the text files inside the text server
     TextList,
-    /// Client request the text file identified by the String parameter
     Text(String),
 }
 impl WebMessage for TextRequest {}
 
-/// Identifies the types of requests that can be sent to a media server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum MediaRequest {
-    /// Client request a list of all the text files inside the media server
     MediaList,
-    /// Client request the media file identified by the String parameter
     Media(String),
 }
 impl WebMessage for MediaRequest {}
 
-/// Identifies the types of response that can be sent from a text server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum TextResponse {
-    /// Server sends the list of filenames of its own text files
     TextList(Vec<String>),
-    /// Server sends a serialized text file
     Text(Vec<u8>),
 }
 impl WebMessage for TextResponse {}
 
-/// Identifies the types of response that can be sent from a media server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum MediaResponse {
-    /// Server sends the list of filenames of its own media files
     MediaList(Vec<String>),
-    /// Server sends a serialized media file
     Media(Vec<u8>),
 }
 impl WebMessage for MediaResponse {}
 
-/// Identifies the types of response that can be sent from both text and media server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum GenericResponse {
-    /// Server sends its own type (text or media)
     Type(ServerType),
-    /// Server received an invalid request
     InvalidRequest,
-    /// Server received a request for a file that cannot be found
     NotFound,
 }
 
-/// General type for a web request that can be sent by a web client
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum Request {
     Media(MediaRequest),
@@ -152,7 +116,6 @@ pub enum Request {
     Type,
 }
 
-/// General type for a web response that can be sent by a web server
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub enum Response {
     Media(MediaResponse),
@@ -160,7 +123,6 @@ pub enum Response {
     Generic(GenericResponse),
 }
 
-/// Contains all the details of a web request
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub struct RequestMessage {
     pub source_id: NodeId,
@@ -168,7 +130,6 @@ pub struct RequestMessage {
     pub content: Request,
 }
 
-/// Contains all the details of a web response
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]
 pub struct ResponseMessage {
     pub source_id: NodeId,
@@ -177,15 +138,9 @@ pub struct ResponseMessage {
 }
 
 impl RequestMessage {
-    /// Constructor for a text list request
-    /// * `source_id`: id of the web client that creates the request
-    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
-    pub fn new_text_list_request(
-        source_id: NodeId,
-        compression_type: Compression,
-    ) -> RequestMessage {
+    pub fn new_text_list_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
         Self {
             source_id,
             compression_type,
@@ -193,17 +148,9 @@ impl RequestMessage {
         }
     }
 
-    /// Constructor for a text request
-    /// * `source_id`: id of the web client that creates the request
-    /// * `compression_type`: compression algorithm to be used for the response's content
-    /// * file: name of the requested text file
     #[inline]
     #[must_use]
-    pub fn new_text_request(
-        source_id: NodeId,
-        compression_type: Compression,
-        file: String,
-    ) -> RequestMessage {
+    pub fn new_text_request(source_id: NodeId, compression_type: Compression, file: String) -> RequestMessage {
         Self {
             source_id,
             compression_type,
@@ -211,15 +158,9 @@ impl RequestMessage {
         }
     }
 
-    /// Constructor for a media list request
-    /// * `source_id`: id of the web client that creates the request
-    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
-    pub fn new_media_list_request(
-        source_id: NodeId,
-        compression_type: Compression,
-    ) -> RequestMessage {
+    pub fn new_media_list_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
         Self {
             source_id,
             compression_type,
@@ -227,17 +168,9 @@ impl RequestMessage {
         }
     }
 
-    /// Constructor for a media request
-    /// * `source_id`: id of the web client that creates the request
-    /// * `compression_type`: compression algorithm to be used for the response's content
-    /// * file: name of the requested media file
     #[inline]
     #[must_use]
-    pub fn new_media_request(
-        source_id: NodeId,
-        compression_type: Compression,
-        file: String,
-    ) -> RequestMessage {
+    pub fn new_media_request(source_id: NodeId, compression_type: Compression, file: String) -> RequestMessage {
         Self {
             source_id,
             compression_type,
@@ -245,9 +178,6 @@ impl RequestMessage {
         }
     }
 
-    /// Constructor for a type request
-    /// * `source_id`: id of the web client that creates the request
-    /// * `compression_type`: compression algorithm to be used for the response's content
     #[inline]
     #[must_use]
     pub fn new_type_request(source_id: NodeId, compression_type: Compression) -> RequestMessage {
@@ -260,17 +190,9 @@ impl RequestMessage {
 }
 
 impl ResponseMessage {
-    /// Constructor for a type response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
-    /// * `server_type`: type of server that sends this response
     #[inline]
     #[must_use]
-    pub fn new_type_response(
-        source_id: NodeId,
-        compression_type: Compression,
-        server_type: ServerType,
-    ) -> ResponseMessage {
+    pub fn new_type_response(source_id: NodeId, compression_type: Compression, server_type: ServerType) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -278,15 +200,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for a "not found" response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
     #[inline]
     #[must_use]
-    pub fn new_not_found_response(
-        source_id: NodeId,
-        compression_type: Compression,
-    ) -> ResponseMessage {
+    pub fn new_not_found_response(source_id: NodeId, compression_type: Compression) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -294,15 +210,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for an "invalid request" response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
     #[inline]
     #[must_use]
-    pub fn new_invalid_request_response(
-        source_id: NodeId,
-        compression_type: Compression,
-    ) -> ResponseMessage {
+    pub fn new_invalid_request_response(source_id: NodeId, compression_type: Compression) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -310,17 +220,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for a text list response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
-    /// * list: list of text files available in the server
     #[inline]
     #[must_use]
-    pub fn new_text_list_response(
-        source_id: NodeId,
-        compression_type: Compression,
-        list: Vec<String>,
-    ) -> ResponseMessage {
+    pub fn new_text_list_response(source_id: NodeId, compression_type: Compression, list: Vec<String>) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -328,17 +230,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for a text file response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
-    /// * data: serialized text file
     #[inline]
     #[must_use]
-    pub fn new_text_response(
-        source_id: NodeId,
-        compression_type: Compression,
-        data: Vec<u8>,
-    ) -> ResponseMessage {
+    pub fn new_text_response(source_id: NodeId, compression_type: Compression, data: Vec<u8>) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -346,17 +240,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for a media list file response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
-    /// * list: list of media files available in the server
     #[inline]
     #[must_use]
-    pub fn new_media_list_response(
-        source_id: NodeId,
-        compression_type: Compression,
-        list: Vec<String>,
-    ) -> ResponseMessage {
+    pub fn new_media_list_response(source_id: NodeId, compression_type: Compression, list: Vec<String>) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
@@ -364,17 +250,9 @@ impl ResponseMessage {
         }
     }
 
-    /// Constructor for a media file response
-    /// * `source_id`: id of the web server that creates the response
-    /// * `compression_type`: compression algorithm used for the response's content
-    /// * data: serialized media file
     #[inline]
     #[must_use]
-    pub fn new_media_response(
-        source_id: NodeId,
-        compression_type: Compression,
-        data: Vec<u8>,
-    ) -> ResponseMessage {
+    pub fn new_media_response(source_id: NodeId, compression_type: Compression, data: Vec<u8>) -> ResponseMessage {
         Self {
             source_id,
             compression_type,
