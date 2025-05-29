@@ -9,7 +9,6 @@ use bincode::config::standard;
 use bincode::{Encode, Decode};
 use serde::{Serialize, de::DeserializeOwned};
 
-use crate::SerializationError;
 use wg_2024::network::NodeId;
 
 use crate::ServerType;
